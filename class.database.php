@@ -7,7 +7,7 @@ class database{
 	public function __construct($host,$dbname,$user,$pass){
 		
 		$this->conn = new PDO("mysql:host=".$host.";dbname=".$dbname,$user,$pass);
-		$this->conn->set_charset('utf8');
+		
 	}
 
 
