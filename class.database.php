@@ -7,7 +7,7 @@ class database{
 	public function __construct($host,$dbname,$user,$pass){
 		
 		$this->conn = new PDO("mysql:host=".$host.";dbname=".$dbname,$user,$pass);
-		
+		$this->conn->exec("set names utf8");
 	}
 
 
@@ -32,10 +32,11 @@ class database{
 	// Tek Veri Çekme
 	// Single Data Drawing
 	public function tek_veri($id,$table,$col){
-		$komuta = "SELECT * FROM $table WHERE id=$id";
-		$result = $this->conn->query($komuta)->fetch(PDO::FETCH_ASSOC) or die ("Veri Bulunamadı");
-		$data[] = $result; 
-		echo $data[0]["$col"];
+		$komuta = "SELECT * FROM $table WHERE id=?";
+		$result = $this->conn->prepare($komuta) ; 
+		$result->execute(array($id)) ;
+		$sonuc = $result->fetch() or die("Veri Bulunamadı");
+		echo $sonuc["kadi"];
 			
 	}
 	// Veri Ekleme
@@ -49,10 +50,7 @@ class database{
 
 	//Veri Tabanı Kapatma
 	//CLOSE A DATABASE
-	public function __destruct()
-    {
-        $this->conn->close();
-    }
+	
 
 	
 }
@@ -65,7 +63,7 @@ $db = new database("localhost","uzem","root","");
 // Veri Güncelleme [GÜNCELLENECEK İD, TABLO İSMİ, KOLON İSMİ, VERİ]
 // Data Update [ID TO BE UPDATED, TABLE NAME, COLUMN NAME, DATA]
 
-echo $db->guncelle(1,"uye","onay",1);
+echo $db->guncelle(7,"uye","onay",1);
 
 
 // Verileri Listeleme [TABLO İSMİ]
@@ -77,7 +75,7 @@ foreach($db->listele("uye") as $value){
 
 //İlk Veriyi Çekme [ARANACAK İD,TABLO İSMİ,GÖSTERİLECEK KOLON İSMİ]
 // Pulling First Data [ID, TABLE NAME, COLUMN NAME TO BE SHOWN]
- $db->tek_veri(1,"uye","kadi");
+ $db->tek_veri(7,"uye","kadi");
 
 
 // Veri Ekleme [TABLO İSMİ, 1.KOLON VERİ, 2.KOLON VERİ, 3.KOLON VERİ]
