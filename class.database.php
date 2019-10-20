@@ -15,7 +15,8 @@ class database{
 	// Fetching Data
 	public function listele($table){
 			$komut = "SELECT * FROM $table";
-			$sonuc = $this->conn->query($komut) or die("Veri Getirilemedi!");
+			$sonuc = $this->conn->prepare($komut) or die("Veri Getirilemedi!");
+			$sonuc->execute();
 				if ($sonuc->rowCount()) {
 					foreach ($sonuc as $sonuc) {
 						$data[] = $sonuc;
@@ -63,7 +64,7 @@ $db = new database("localhost","uzem","root","");
 // Veri Güncelleme [GÜNCELLENECEK İD, TABLO İSMİ, KOLON İSMİ, VERİ]
 // Data Update [ID TO BE UPDATED, TABLE NAME, COLUMN NAME, DATA]
 
-echo $db->guncelle(7,"uye","onay",1);
+//echo $db->guncelle(7,"uye","onay",1);
 
 
 // Verileri Listeleme [TABLO İSMİ]
@@ -75,7 +76,7 @@ foreach($db->listele("uye") as $value){
 
 //İlk Veriyi Çekme [ARANACAK İD,TABLO İSMİ,GÖSTERİLECEK KOLON İSMİ]
 // Pulling First Data [ID, TABLE NAME, COLUMN NAME TO BE SHOWN]
- $db->tek_veri(7,"uye","kadi");
+$db->tek_veri(7,"uye","kadi");
 
 
 // Veri Ekleme [TABLO İSMİ, 1.KOLON VERİ, 2.KOLON VERİ, 3.KOLON VERİ]
